@@ -1,0 +1,247 @@
+\documentclass{article}
+
+\usepackage[margin=20mm]{geometry}
+\geometry{
+        a4paper,
+        total={165mm,247mm},
+        top=30mm,
+        bottom=20mm
+%       evenmargin=25mm,
+%       oddsidemargine=20mm
+%       left=20mm
+}
+
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{tikz}
+\usepackage[european,cuteinductors,smartlabels]{circuitikz}
+\usepackage{setspace}
+\usepackage{amsmath}
+
+\title{Уравнения Даламбера для тела на наклонной плоскости}
+\author{Прокшин А.Н. }
+% Конец преамбулы
+%https://tex.stackexchange.com/questions/268612/how-to-write-a-text-along-a-circle
+%https://tex.stackexchange.com/questions/306457/how-to-bend-a-mathematical-formula-around-an-arc-or-circle
+\usetikzlibrary{decorations.text,fit,chains,calc,shapes.geometric,intersections}
+\begin{document}
+\pagenumbering{gobble}
+%\maketitle
+\begin{tikzpicture}[function 4/.style={
+   draw opacity=0.1, 
+   rotate=0,
+   postaction={decorate,
+               decoration={
+                         raise=-1.5ex,
+                         text along path,
+                         %reverse path,
+                         text align={fit to path stretching spaces},
+                         text={%
+				 |\color{red}| ${x_2} = {\tg\alpha} {x_1}$ } 
+                              }
+                        }
+                }
+    ]
+\newcommand{\alfa}{35}
+\newcommand{\D}{6}
+\newcommand{\F}{3}
+\newcommand{\Q}{2}
+\newcommand{\Qq}{\Q/sin(\alfa)}
+\newcommand{\QQ}{\Q/sin(\alfa)}
+\draw[thin, ->] (-5.5,0) -- (6,0) node[right] {$x_1$};
+	\draw[thin, ->] (0,-3.8) -- (0,6) node[left] {$x_2$} ;
+	\draw ({-\D*cos(\alfa)},{-\D*sin(\alfa)}) --  (0,0) ({\QQ*cos(\alfa)},{\QQ*sin(\alfa)}) -- ({\D*cos(\alfa)},{\D*sin(\alfa)}); 
+	\draw[ultra thick,red,->,>=latex] (0,0) -- (0,{-\F}) node[midway,right] {$\vec{F}$};
+%	\draw[ postaction={decorate,decoration={text effects along path, text={  x },text align=center, text effects/.cd, text along path, every character/.style={fill=yellow, yshift=5mm}}}] 
+%	({\D*cos(\alfa)/2},{\D*sin(\alfa)/2}) -- ({\D*cos(\alfa)},{\D*sin(\alfa)});
+	\path[function 4] ({0.8*\D*cos(\alfa)},{0.8*\D*sin(\alfa)}) -- ({1.2*\D*cos(\alfa)},{1.2*\D*sin(\alfa)});
+
+	\draw[blue,->,>=latex, ultra thin] (0,0) -- ({\Q*(-sin(\alfa))},{\Q*cos(\alfa)}) node[left] {$\vec{q}_1$};
+	\draw[blue,->, ultra thin] (0,0) -- (0,{\Q}) node[right] {$\vec{q}_2$};
+	\draw[magenta,->, ultra thin] (0,0) -- ({-\Qq},0) node[above] {$\vec{q}^1$};
+	\draw[magenta,->] (0,0) -- ({\QQ*cos(\alfa)},{\QQ*sin(\alfa)}) node[left] {$\vec{q}^2$};
+%%%%%%%
+	\newcommand{\zx}{2}
+	\newcommand{\zy}{6}
+	\draw[->,>=latex'] (0,0) -- ({\zx},{\zy}) node[right] {$F^i,q^i(x_1,x_2)$}; % z= zx + zy
+	\draw[help lines,densely dotted] ({\Q*(-sin(\alfa))},{\Q*cos(\alfa)})  -- ({\Q*(-sin(\alfa)) + \zx/6},{\Q*cos(\alfa) + \zy/6});
+	\draw[help lines, blue, thin, dashed,->,>=latex'] (0,0) -- ({\Q*(-sin(\alfa)) + \zx/6},{\Q*cos(\alfa) + \zy/6}) ;
+	\draw[help lines,thin]  ({\Q*(-sin(\alfa)) + \zx/6},{\Q*cos(\alfa) + \zy/6}) --  ({2*(\Q*(-sin(\alfa)) + \zx/6)},{2*(\Q*cos(\alfa) + \zy/6)}) ;
+	\draw[help lines, loosely dashdotted] ({\Q*(-sin(\alfa))},{\Q*cos(\alfa)}) -- ({2*\Q*(-sin(\alfa))},{2*\Q*cos(\alfa)});
+	\draw[help lines,densely dotted]  ({2*\Q*(-sin(\alfa))},{2*\Q*cos(\alfa)}) -- ({2*(\Q*(-sin(\alfa)) + \zx/6)},{2*(\Q*cos(\alfa) + \zy/6)}) ;
+% нижний
+	\newcommand{\lowx}{(-4*cos(\alfa)}
+	\newcommand{\lowy}{(-4*sin(\alfa)}
+	\draw[help lines, ultra thin] ({\lowx},{\lowy}) -- ({\lowx + 2*\Q*(-sin(\alfa))},{\lowy + 2*\Q*cos(\alfa)}) node (Alow) {};
+	\draw[help lines, ultra thin, name path=line 1] ({\lowx},{\lowy}) -- ({\lowx + 2*(\Q*(-sin(\alfa)) + \zx/6)},{\lowy + 2*(\Q*cos(\alfa) + \zy/6)}) node (A) {};
+        \renewcommand{\lowx}{(2.5*cos(\alfa)}
+        \renewcommand{\lowy}{(2.5*sin(\alfa)}
+	\draw[help lines, ultra thin, loosely dashdotted] ({\lowx},{\lowy}) -- ({\lowx + 2*\Q*(-sin(\alfa))},{\lowy + 2*\Q*cos(\alfa)}) node (Blow) {};
+	\draw[help lines, ultra thin] ({\lowx},{\lowy}) -- ({\lowx + 2*(\Q*(-sin(\alfa)) + \zx/6)},{\lowy + 2*(\Q*cos(\alfa) + \zy/6)}) node (B) {};
+	\draw[help lines] (A.center) -- (B.center);
+	\path[name path= line 2] (Alow.center) -- (Blow.center); 
+	\path [name intersections={of=line 1 and line 2, by=E}];
+	\draw[help lines] (Alow.center) -- (E);
+        \draw[help lines, loosely dashdotted] (E) -- (Blow.center);	
+\end{tikzpicture}
+
+Наклонная плоскость описывается уравнением (в декартовой системе ковариантные и контравариантные координаты вектора совпадают)
+\begin{equation}
+x_1\cdot\tg\alpha = x_2
+\label{nakl}
+\end{equation}
+
+
+\begin{equation}
+\left\{
+%\begingroup \renewcommand\baselinestretch{1.6}\selectfont	
+\begin{onehalfspacing}
+	\begin{array}{l}	
+		F^1(x_1,x_2) = - \sin\alpha\cdot x_1 + \cos\alpha\cdot x_2 = 0 = q^1 - \textcyrillic{уравнение связи,} \\ 
+%\\
+		F^2(x_1,x_2) = x_2 = q^2 - \textcyrillic{свободная переменная}
+	\end{array}
+\end{onehalfspacing}	
+%\endgroup
+\right.  
+\end{equation}
+
+Импульсы в системе $x_1,x_2$ обозначим через $\xi_i = m \dot{x}_i$, силы в системе обозначим через $X_i$
+
+Уравнения движения запишутся:
+\begin{equation} 
+\left\{%\begin{doublespacing}
+\begingroup \renewcommand\baselinestretch{2.2}\selectfont	
+\begin{array}{l}
+	{\displaystyle	\frac{d\xi_1}{dt} = X_1 + \lambda_1 \frac{\partial F^1}{\partial x_1} } - \textcyrillic{частные производные только по связи } F^1\\ 
+	{\displaystyle \frac{d\xi_2}{dt} = X_2 + \lambda_1 \frac{\partial F^1}{\partial x_2} }
+\end{array}%\end{doublespacing}
+\endgroup
+\right.
+\label{motion_equation}
+\end{equation}
+
+%Частные производные только по связи.
+
+Производные по времени:
+$$
+\sum\limits_{i=1}^2 \frac{\partial F^k}{\partial x_i}\dot{x}_i = 
+\left\{\begin{onehalfspacing}
+%	\begin{spacing}{1.0}
+	\begin{array}{l}
+		\dot{q^k}, - \textcyrillic{свободная переменная} \\
+		0 - \textcyrillic{связь}\end{array}
+%	\end{spacing}
+	\end{onehalfspacing}
+		\right.
+$$
+
+
+$$
+	\frac{\partial F^1}{\partial x_1}\dot{x}_1  + \frac{\partial F^1}{\partial x_2} \dot{x}_2 = - \sin\alpha \:\dot{x}_1 + \cos\alpha \:\dot{x}_2 = \dot{q^1} = 0
+-  \textcyrillic{из уравнения связи}
+$$
+$$
+	\dot{x}_2 = \dot{q^2} - \textcyrillic{из уравнения для свободной переменной}
+$$
+
+Из этих уравнений определяем $\dot{x}_1$ и $\dot{x}_2$
+
+$$
+\left\{\begin{onehalfspacing}
+\begin{array}{l}
+	\dot{x}_1 = \ctg\alpha\:\dot{q^2} \\
+	\dot{x}_2 = \dot{q^2}
+\end{array}
+\end{onehalfspacing}
+\right.	
+$$
+
+Из независимости работы от системы координат
+$$
+\delta A = \sum\limits_{i=1}^2 X_i \delta x_i = \sum\limits_\textcyrillic{
+по свободным
+		} Q_i \delta q^i 
+$$
+и затем перейдя к скоростям 
+
+$$ 
+\sum\limits_\textcyrillic{ по свободным } Q_i \delta \dot{q^i} = \sum\limits_{i=1}^2 X_i \delta \dot{x}_i
+$$
+
+$$
+Q_2 \delta \dot{q^2} = X_1 \ctg\alpha\:\delta\dot{q^2} + X_2 \delta\dot{q^2} 
+$$
+
+подставляя $X_1 = 0$ и $X_2 = -F$
+
+$$
+Q_2 = -F = Q^2
+$$
+Заметим, что вектор, лежащий на оси, имеет совпадающие ковариантные и контравариантные координаты.
+
+Найдем $\lambda_1$
+
+$$
+\left\{\begin{onehalfspacing}
+\begin{array}{l}
+\dot{\xi}_1 = X_1 + \lambda_1 \sin\alpha \\
+\dot{\xi}_2 = X_2 - \lambda_1 \cos\alpha
+\end{array} 	
+\end{onehalfspacing}\right. =
+\left\{\begin{onehalfspacing}
+\begin{array}{l}
+\dot{\xi}_1 = 0 + \lambda_1 \sin\alpha \\
+\dot{\xi}_2 = -F - \lambda_1 \cos\alpha
+\end{array}
+\end{onehalfspacing}\right.
+$$
+
+Из уравнения связи 
+$$
+{\displaystyle \dot{\xi}_2/\tg\alpha = \lambda_1\sin\alpha \Rightarrow \dot{\xi}_2 = \lambda_1 \frac{\sin^2\alpha}{\cos\alpha}}
+$$
+
+$$
+\dot{\xi}_2 = X_2 - \lambda_1 \cos\alpha 
+$$
+
+$$
+\lambda_1\left(\frac{\sin^2\alpha}{\cos\alpha} + \cos\alpha\right) = X_2
+$$
+
+$$
+\lambda_1 \frac{1}{\cos\alpha} = X_2
+$$
+
+\begin{equation}
+	\lambda_1 =\underbrace{X_2\cos\alpha}_\textcyrillic{это сила реакции опоры}	
+\end{equation}	
+
+Подставляя найденную $\lambda_1$ в уравнения движения (\ref{motion_equation}) получаем:
+
+\begin{equation}
+\left\{%\begin{doublespacing}
+\begingroup \renewcommand\baselinestretch{2.2}\selectfont
+\begin{array}{l}
+	{\displaystyle  \frac{d\xi_1}{dt} = 0 + X_2\cos\alpha \cdot \sin\alpha  = -F \cos\alpha \cdot \sin\alpha }\\
+        {\displaystyle \frac{d\xi_2}{dt} = X_2 - X_2\cos\alpha \cdot \cos\alpha  = X_2 \sin^2\alpha = F\sin^2\alpha}
+\end{array}%\end{doublespacing}
+\endgroup
+\right.  
+\end{equation}
+
+Импульсы преобразуются по формуле аналогичной силе $Q$
+$$
+p_2 = \xi_1 \ctg\alpha + \xi_2
+$$
+
+	Уравнения движения (\ref{motion_equation}) преобразуются к виду
+
+$$
+	\frac{\partial p_2}{\partial t} = Q_2 + \lambda_1  \frac{\partial F^1}{\partial x_1} \cdot \ctg\alpha  + \lambda_1\frac{\partial F^1}{\partial x_2} = Q_2 = -F
+$$
+все члены с $\lambda_1$ обнуляются.
+\end{document}
