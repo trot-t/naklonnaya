@@ -19,6 +19,15 @@
 \usepackage[european,cuteinductors,smartlabels]{circuitikz}
 \usepackage{setspace}
 \usepackage{amsmath}
+\usepackage{accents}
+\usepackage{amssymb,graphicx}
+
+\makeatletter
+\renewcommand*\dot[1]{%
+%	\accentset{\cc@dot}{#1}%	
+	\accentset{{\cc@style{\cdot}}}{#1}
+}
+
 
 \title{Уравнения Даламбера для тела на наклонной плоскости}
 \author{Прокшин А.Н. }
@@ -89,7 +98,7 @@
 
 Наклонная плоскость описывается уравнением (в декартовой системе ковариантные и контравариантные координаты вектора совпадают)
 \begin{equation}
-x_1\cdot\tg\alpha = x_2
+x_1\cdot\tg\alpha = x_2 + const
 \label{nakl}
 \end{equation}
 
@@ -99,14 +108,23 @@ x_1\cdot\tg\alpha = x_2
 %\begingroup \renewcommand\baselinestretch{1.6}\selectfont	
 \begin{onehalfspacing}
 	\begin{array}{l}	
-		F^1(x_1,x_2) = - \sin\alpha\cdot x_1 + \cos\alpha\cdot x_2 = 0 = q^1 - \textcyrillic{уравнение связи,} \\ 
+		F^1(x_1,x_2) = - \sin\alpha\cdot x_1 + \cos\alpha\cdot x_2 + q^1_0 = 0 = q^1(x_1,x_2) - \textcyrillic{уравнение связи,} \\ 
 %\\
-		F^2(x_1,x_2) = x_2 = q^2 - \textcyrillic{свободная переменная}
+		F^2(x_1,x_2) = x_2 + q^2_0 = q^2(x_1,x_2) - \textcyrillic{свободная переменная}
 	\end{array}
 \end{onehalfspacing}	
 %\endgroup
-\right.  
+\right.
+\label{initial}
 \end{equation}
+
+%$$
+%\dddot{x}
+%$$
+%\makeatletter
+%\renewcommand*\dddot[1]{
+%\placeaccent{\acc@dot}{#1}
+%}
 
 Импульсы в системе $x_1,x_2$ обозначим через $\xi_i = m \dot{x}_i$, силы в системе обозначим через $X_i$
 
@@ -131,20 +149,33 @@ $$
 \left\{\begin{onehalfspacing}
 %	\begin{spacing}{1.0}
 	\begin{array}{l}
-		\dot{q^k}, - \textcyrillic{свободная переменная} \\
+		\dot{q}^k, - \textcyrillic{свободная переменная} \\
 		0 - \textcyrillic{связь}\end{array}
 %	\end{spacing}
 	\end{onehalfspacing}
 		\right.
 $$
+В развернутом виде для выбранной системы координат:
+\begin{equation}
+\left\{\begin{doublespacing}
+%       \begin{spacing}{1.0}
+	\begin{array}{ccc}
+		\frac{\partial q^1}{\partial x_1} \dot{x_1} +  \frac{\partial q^1}{\partial x_2} \dot{x_2} &=& 0 \\
+		\frac{\partial q^1}{\partial x_1} \dot{x_1} +  \frac{\partial q^1}{\partial x_2} \dot{x_2} &=& \dot{q}^2
+	\end{array}
+        \end{doublespacing}
+\right.		
+\end{equation}
+	И если уравнения для координат (\ref{initial}) является <<точечным>> преобразованием, то уравнение для скоростей является линейным.
 
+в наших обозначениях 
 
 $$
-	\frac{\partial F^1}{\partial x_1}\dot{x}_1  + \frac{\partial F^1}{\partial x_2} \dot{x}_2 = - \sin\alpha \:\dot{x}_1 + \cos\alpha \:\dot{x}_2 = \dot{q^1} = 0
+	\frac{\partial F^1}{\partial x_1}\dot{x}_1  + \frac{\partial F^1}{\partial x_2} \dot{x}_2 = - \sin\alpha \:\dot{x}_1 + \cos\alpha \:\dot{x}_2 = \dot{q}^1 = 0
 -  \textcyrillic{из уравнения связи}
 $$
 $$
-	\dot{x}_2 = \dot{q^2} - \textcyrillic{из уравнения для свободной переменной}
+	\dot{x}_2 = \dot{q}^2 - \textcyrillic{из уравнения для свободной переменной}
 $$
 
 Из этих уравнений определяем $\dot{x}_1$ и $\dot{x}_2$
@@ -152,10 +183,20 @@ $$
 $$
 \left\{\begin{onehalfspacing}
 \begin{array}{l}
-	\dot{x}_1 = \ctg\alpha\:\dot{q^2} \\
-	\dot{x}_2 = \dot{q^2}
+	\dot{x}_1 = \ctg\alpha\:\dot{q}^2 \\
+	\dot{x}_2 = \dot{q}^2
 \end{array}
 \end{onehalfspacing}
+\right.
+$$
+
+$$
+\left\{\begin{doublespacing}
+\begin{array}{lll}
+	\frac{\partial x_1}{\partial q^1} \dot{q}^1 + \frac{\partial x_1}{\partial q^2}  \dot{q}^2 &=& \dot{x}_1 \\
+	\frac{\partial x_2}{\partial q^1} \dot{q}^1 + \frac{\partial x_2}{\partial q^2}  \dot{q}^2 & = & \dot{x}_2
+\end{array}
+\end{doublespacing}
 \right.	
 $$
 
@@ -168,11 +209,11 @@ $$
 и затем перейдя к скоростям 
 
 $$ 
-\sum\limits_\textcyrillic{ по свободным } Q_i \delta \dot{q^i} = \sum\limits_{i=1}^2 X_i \delta \dot{x}_i
+	\sum\limits_\textcyrillic{ по свободным } Q_i \delta \dot{q}^i = \sum\limits_{i=1}^2 X_i \delta \dot{x}_i
 $$
 
 $$
-Q_2 \delta \dot{q^2} = X_1 \ctg\alpha\:\delta\dot{q^2} + X_2 \delta\dot{q^2} 
+	Q_2 \delta \dot{q}^2 = X_1 \ctg\alpha\:\delta\dot{q}^2 + X_2 \delta\dot{q}^2 
 $$
 
 подставляя $X_1 = 0$ и $X_2 = -F$
